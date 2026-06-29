@@ -36,10 +36,9 @@ export const useUsers = () => {
       // JSONPlaceholder always returns id: 11 — use Date.now() for a truly unique local ID
       // We keep response.data fields (firstName, lastName, etc.) but override the id
       const newUser = {
-        ...formData,           // our local form data (firstName, lastName, email, department)
-        id: Date.now(),        // unique local id (overrides JSONPlaceholder's id: 11)
-        ...response.data,      // merge API response (in case it adds extra fields in future)
-        id: Date.now(),        // re-assert our unique id last so API can't overwrite it
+        ...response.data,  // merge API response fields
+        ...formData,       // our local form data takes precedence
+        id: Date.now(),    // unique local id — overrides JSONPlaceholder's id: 11
       };
       setUsers((prev) => [newUser, ...prev]);
     } catch (err) {
