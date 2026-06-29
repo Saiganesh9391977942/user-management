@@ -8,7 +8,7 @@ const Header = ({ onAddUser }) => (
           User Management
         </h1>
         <p className="mt-1.5 text-slate-400 text-sm max-w-md">
-          View, add, edit, and delete team members. All changes are synced with the API in real time.
+          View, add, edit, and delete team members.
         </p>
       </div>
 
