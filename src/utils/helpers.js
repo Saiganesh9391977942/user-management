@@ -15,10 +15,8 @@ export const mapApiUserToUser = (apiUser, index) => {
   const firstName = nameParts[0] || '';
   const lastName = nameParts.slice(1).join(' ') || '';
 
-  const department =
-    apiUser.company?.name ||
-    DEPARTMENTS[index % DEPARTMENTS.length] ||
-    DEFAULT_DEPARTMENT;
+  // The assignment explicitly says: "Assign a default placeholder department (such as "IT", "Engineering", or "Sales") during initialization."
+  const department = DEPARTMENTS[index % DEPARTMENTS.length];
 
   return {
     id: apiUser.id,

@@ -1,4 +1,5 @@
 import { useState, useMemo } from 'react';
+import { Toaster, toast } from 'react-hot-toast';
 import { useUsers } from './hooks/useUsers';
 import Header from './components/Header';
 import SearchBar from './components/SearchBar';
@@ -92,8 +93,18 @@ function App() {
   const handleDeleteUser = (user) => { setUserToDelete(user); setDeleteOpen(true); };
 
   const handleFormSubmit = async (data) => {
-    if (userToEdit) await editUser(userToEdit.id, data);
-    else            await addUser(data);
+    try {
+      if (userToEdit) {
+        await editUser(userToEdit.id, data);
+        toast.success('User updated successfully');
+      } else {
+        await addUser(data);
+        toast.success('User created successfully');
+      }
+    } catch (error) {
+      toast.error('Failed to save user. Please try again.');
+      throw error; // Rethrow so UserForm can also handle it locally if needed
+    }
   };
 
   const handleConfirmDelete = async () => {
@@ -101,8 +112,11 @@ function App() {
     setDeleting(true);
     try {
       await removeUser(userToDelete.id);
+      toast.success('User deleted successfully');
       setDeleteOpen(false);
       setUserToDelete(null);
+    } catch (error) {
+      toast.error('Failed to delete user. Please try again.');
     } finally {
       setDeleting(false);
     }
@@ -113,6 +127,17 @@ function App() {
 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100">
+      <Toaster 
+        position="bottom-right" 
+        toastOptions={{
+          style: {
+            background: '#1e293b', // slate-800
+            color: '#f8fafc',      // slate-50
+            border: '1px solid #334155', // slate-700
+          },
+          success: { iconTheme: { primary: '#8b5cf6', secondary: '#ffffff' } },
+        }} 
+      />
 
       {/* ── Main Content ─────────────────────────────────────────────────── */}
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-10">
